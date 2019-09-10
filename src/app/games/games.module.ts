@@ -7,10 +7,13 @@ import {PlatformsService} from './shared/platforms.service';
 // ngrx elements
 import {StoreModule, ActionReducerMap} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {GameEffects} from './store/games.effects';
 import * as gameReducer from './store/games.reducers';
 import * as platformReducer from './store/platforms.reducers';
 import {PlatformEffects} from './store/platforms.effects';
+
+import { environment } from '../../environments/environment';
 
 export const reducers: ActionReducerMap<any> = {
   games: gameReducer.reducer,
@@ -22,7 +25,11 @@ export const reducers: ActionReducerMap<any> = {
     SharedModule,
     GamesRoutingModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([GameEffects, PlatformEffects])
+    EffectsModule.forRoot([GameEffects, PlatformEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    })
   ],
   declarations: [gamesRoutedComponents],
   providers: [
